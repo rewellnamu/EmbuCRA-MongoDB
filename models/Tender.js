@@ -10,15 +10,10 @@ const tenderSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Description is required']
   },
-  tenderNumber: {
+  category: {
     type: String,
-    required: [true, 'Tender number is required'],
-    unique: true,
-    trim: true
-  },
-  department: {
-    type: String,
-    required: [true, 'Department is required']
+    required: [true, 'Category is required']
+    // Removed enum - allows any category value
   },
   openingDate: {
     type: Date,
@@ -28,18 +23,16 @@ const tenderSchema = new mongoose.Schema({
     type: Date,
     required: [true, 'Closing date is required']
   },
-  category: {
-    type: String,
-    enum: ['goods', 'services', 'works', 'consultancy'],
-    default: 'goods'
-  },
   status: {
     type: String,
     enum: ['open', 'closed', 'awarded', 'cancelled'],
     default: 'open'
   },
-  documentUrl: String,
-  estimatedValue: Number
+  value: {
+    type: Number,
+    default: 0
+  },
+  documentUrl: String
 }, {
   timestamps: true
 });

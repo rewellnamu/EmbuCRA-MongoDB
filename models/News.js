@@ -6,31 +6,35 @@ const newsSchema = new mongoose.Schema({
     required: [true, 'Title is required'],
     trim: true
   },
+  summary: {  // Changed from 'excerpt'
+    type: String,
+    required: [true, 'Summary is required'],
+    trim: true
+  },
   content: {
     type: String,
     required: [true, 'Content is required']
   },
-  excerpt: {
-    type: String,
-    trim: true
-  },
   category: {
     type: String,
-    enum: ['announcement', 'event', 'news', 'press-release'],
-    default: 'news'
+    required: [true, 'Category is required']
+    // Removed enum to allow frontend categories
   },
   author: {
     type: String,
-    default: 'Embu County Government'
+    required: [true, 'Author is required'],
+    default: 'County Communications'
   },
-  imageUrl: String,
-  published: {
+  publishDate: {  // Changed from 'publishedDate'
+    type: Date,
+    required: [true, 'Publish date is required']
+  },
+  featured: {  // Added
     type: Boolean,
     default: false
   },
-  publishedDate: {
-    type: Date
-  }
+  imageUrl: String,
+  tags: [String]  // Added
 }, {
   timestamps: true
 });
