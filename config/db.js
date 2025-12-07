@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
-const connectDB = async () => {
+const connectDB = async (mongoUri) => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    // Remove the deprecated options
+    const conn = await mongoose.connect(mongoUri);
 
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
     console.log(`📊 Database: ${conn.connection.name}`);

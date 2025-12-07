@@ -1,19 +1,33 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/errorHandler');
 const logger = require('./middleware/logger');
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+// ========================================
+// CONFIGURATION - Update these values
+// ========================================
+const CONFIG = {
+  PORT: 3000,
+  NODE_ENV: 'development', // Change to 'production' when deploying
+  MONGODB_URI: 'mongodb+srv://rewell:123456789rewell@cluster0.gchafb5.mongodb.net/embucra',
+  ALLOWED_ORIGINS: [
+    'http://localhost:4200',
+    'https://embu-cra-v2.vercel.app'
+  ]
+};
 
-// Connect to MongoDB
-connectDB();
+const app = express();
+const PORT = CONFIG.PORT;
+
+// Connect to MongoDB - Pass the URI directly
+connectDB(CONFIG.MONGODB_URI).catch(err => {
+  console.error('Failed to connect to MongoDB:', err);
+});
 
 // Middleware
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGINS?.split(',') || '*',
+  origin: CONFIG.ALLOWED_ORIGINS,
   credentials: true
 }));
 app.use(express.json());
@@ -25,7 +39,7 @@ app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
     message: 'Embu County API is running',
-    environment: process.env.NODE_ENV,
+    environment: CONFIG.NODE_ENV,
     timestamp: new Date().toISOString()
   });
 });
@@ -50,7 +64,7 @@ app.use(errorHandler);
 // Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`📝 Environment: ${process.env.NODE_ENV}`);
+  console.log(`📝 Environment: ${CONFIG.NODE_ENV}`);
   console.log(`🔗 Health check: http://localhost:${PORT}/api/health`);
 });
 
